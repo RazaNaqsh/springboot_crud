@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -33,6 +35,7 @@ public class UserServiceImpl implements UserService {
 
         //maps created User entity to userOutputDTO
         UserOutputDTO responseDTO = new UserOutputDTO();
+        responseDTO.setId(savedUser.getId());
         responseDTO.setName(savedUser.getName());
         responseDTO.setAge(savedUser.getAge());
         responseDTO.setEmail(savedUser.getEmail());
@@ -47,10 +50,41 @@ public class UserServiceImpl implements UserService {
 
         return users.stream().map(user -> {
             UserOutputDTO dto = new UserOutputDTO();
+            dto.setId(user.getId());
             dto.setName(user.getName());
             dto.setAge(user.getAge());
             dto.setEmail(user.getEmail());
             return dto;
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public ResponseEntity<UserOutputDTO> getUserById(Integer id) {
+        Optional<User> user = userRepo.findById(id);
+
+        if(user.isPresent()){
+            User foundUser = user.get();
+            UserOutputDTO response = new UserOutputDTO();
+            response.setId(foundUser.getId());
+            response.setName(foundUser.getName());
+            response.setAge(foundUser.getAge());
+            response.setEmail(foundUser.getEmail());
+
+            return ResponseEntity.ok(response);
+        }
+        return null;
+    }
+
+    @Override
+    public String deleteUser(Integer id) {
+        Optional<User> deletedUser = userRepo.findById(id);
+        if(deletedUser.isPresent()){
+            User user = deletedUser.get();
+            userRepo.deleteById(id);
+            return user.getName() + " has been deleted";
+        }else{
+        return "User Not Found";
+        }
+
     }
 }

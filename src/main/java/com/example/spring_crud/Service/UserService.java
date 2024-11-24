@@ -13,4 +13,8 @@ public interface UserService {
     ResponseEntity<UserOutputDTO> addUser(UserInputDTO userInputDTO);
 
     List<UserOutputDTO> getAllUsers();
+
+    ResponseEntity<UserOutputDTO> getUserById(Integer id);
+
+    String deleteUser(Integer id);
 }

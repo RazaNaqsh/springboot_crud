@@ -27,4 +27,14 @@ public class UserController {
     public ResponseEntity<List<UserOutputDTO>> getALlUsers(){
         return ResponseEntity.ok(userService.getAllUsers());
     }
+
+    @GetMapping("/getUser/{id}")
+    public ResponseEntity<UserOutputDTO> getUserById(@PathVariable Integer id){
+        return userService.getUserById(id);
+    }
+
+    @DeleteMapping("/deleteUser/{id}")
+    public String deleteUser(@PathVariable Integer id){
+        return userService.deleteUser(id);
+    }
 }
