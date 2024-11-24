@@ -10,9 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
 
@@ -81,10 +81,32 @@ public class UserServiceImpl implements UserService {
         if(deletedUser.isPresent()){
             User user = deletedUser.get();
             userRepo.deleteById(id);
-            return user.getName() + " has been deleted";
+            return user.getName().toUpperCase() + " has been deleted";
         }else{
         return "User Not Found";
         }
 
+    }
+
+    @Override
+    public ResponseEntity<UserOutputDTO> updateUser(UserInputDTO userInputDTO, Integer id) {
+        Optional<User> existingUser = userRepo.findById(id);
+
+        if(existingUser.isPresent()){
+            User FoundUser = existingUser.get();
+            FoundUser.setName(userInputDTO.getName());
+            FoundUser.setAge(userInputDTO.getAge());
+            FoundUser.setEmail(userInputDTO.getEmail());
+            FoundUser.setPassword(userInputDTO.getPassword());
+
+            UserOutputDTO response = new UserOutputDTO();
+            response.setId(FoundUser.getId());
+            response.setName(FoundUser.getName());
+            response.setAge(FoundUser.getAge());
+            response.setEmail(FoundUser.getEmail());
+
+            return ResponseEntity.ok(response);
+        }
+        return null;
     }
 }

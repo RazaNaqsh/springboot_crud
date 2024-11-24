@@ -17,4 +17,6 @@ public interface UserService {
     ResponseEntity<UserOutputDTO> getUserById(Integer id);
 
     String deleteUser(Integer id);
+
+    ResponseEntity<UserOutputDTO> updateUser(UserInputDTO userInputDTO, Integer id);
 }
